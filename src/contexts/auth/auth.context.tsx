@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { authToken } from '../../libs/token';
 import { AuthData } from '../../types/AuthData.interface';
+import { LoginInformation } from '../../types/LoginInformation.type';
 
 const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -16,10 +17,16 @@ const sleep = (ms: number) => {
 export interface AuthContextType {
   isAuth: boolean;
   isAuthChecked: boolean;
+  login: (data: LoginInformation) => void;
+  reg: (data: LoginInformation) => void;
+  isLoadingAuth: boolean;
 }
 const AUTH_CONTEXT_INIT: AuthContextType = {
   isAuth: false,
   isAuthChecked: false,
+  login: () => {},
+  reg: () => {},
+  isLoadingAuth: false,
 };
 const AuthContext = createContext<AuthContextType>(AUTH_CONTEXT_INIT);
 export const useAuth = () => useContext(AuthContext);
@@ -29,7 +36,7 @@ interface AuthProviderProps {
 }
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const { isLoading, login, reg } = useLogReg();
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   const checkAuth = async () => {
@@ -47,7 +54,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuth, isAuthChecked }}>
+    <AuthContext.Provider
+      value={{ isAuth, isAuthChecked, login, reg, isLoadingAuth: isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

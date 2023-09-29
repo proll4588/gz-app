@@ -1,15 +1,15 @@
-import { RouteObject } from 'react-router-dom';
+import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import { AuthLayout } from '../Layouts/AuthLayout';
 import { LoginPage } from '../pages/LoginPage';
 import { RegPage } from '../pages/RegPage';
 
-export const AUTH_ROUTES: RouteObject[] = [
+const AUTH_ROUTER: RouteObject[] = [
   {
-    path: 'auth',
+    path: '/',
     element: <AuthLayout />,
     children: [
       {
-        path: 'login',
+        path: '/',
         element: <LoginPage />,
       },
       {
@@ -19,3 +19,5 @@ export const AUTH_ROUTES: RouteObject[] = [
     ],
   },
 ];
+
+export const authRouter = createBrowserRouter(AUTH_ROUTER);

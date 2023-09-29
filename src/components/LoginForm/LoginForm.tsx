@@ -12,7 +12,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit }) => {
   const { control, handleSubmit } = useForm<LoginInformation>();
 
   const navigateToReg = () => {
-    navigate('/auth/reg');
+    navigate('/reg');
   };
 
   return (

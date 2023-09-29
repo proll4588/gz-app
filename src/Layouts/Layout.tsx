@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { ContextLayout } from './ContextLayout';
 import { useAuth } from '../contexts/auth/auth.context';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress, Typography } from '@mui/material';
 
 export const Layout = () => {
   return (
@@ -23,6 +23,7 @@ const LayoutContainer = () => {
   else
     return (
       <>
+        <Typography>Hello</Typography>
         <Outlet />
       </>
     );
