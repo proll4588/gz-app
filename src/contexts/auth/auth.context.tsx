@@ -9,10 +9,8 @@ import {
 import { authToken } from '../../libs/token';
 import { AuthData } from '../../types/AuthData.interface';
 import { LoginInformation } from '../../types/LoginInformation.type';
-
-const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+import { authLogin, authSignUp } from '../../api/auth/fetch';
+import { useNavigate } from 'react-router-dom';
 
 export interface AuthContextType {
   isAuth: boolean;
@@ -35,17 +33,12 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const { isLoading, login, reg } = useLogReg();
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   const checkAuth = async () => {
-    const token = authToken.get();
-    if (token) {
-      // fetch to check token
-      // if fetch => true then setIsAuth(true)
-    }
-    await sleep(2000);
+    const token = await authToken.get();
+    if (token) setIsAuth(true);
     setIsAuthChecked(true);
   };
 
@@ -53,6 +46,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, []);
 
+  const { isLoading, login, reg } = useLogReg(checkAuth);
   return (
     <AuthContext.Provider
       value={{ isAuth, isAuthChecked, login, reg, isLoadingAuth: isLoading }}
@@ -62,19 +56,32 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-export const useLogReg = () => {
+export const useLogReg = (callBack?: () => void) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = (data: AuthData) => {
+  const login = async (authData: AuthData) => {
     setIsLoading(true);
-    // fetch to login
-    // authToken.set(fetchData)
+    const { data: fetchData, status } = await authLogin({
+      email: authData.login,
+      password: authData.password,
+    });
+    if (status === 200) {
+      authToken.set(fetchData.tokens);
+      callBack && callBack();
+    }
     setIsLoading(false);
   };
-  const reg = (data: AuthData) => {
+
+  const reg = async (authData: AuthData) => {
     setIsLoading(true);
-    // fetch to reg
-    // authToken.set(fetchData)
+    const { data: fetchData, status } = await authSignUp({
+      email: authData.login,
+      password: authData.password,
+    });
+    if (status === 200) {
+      authToken.set(fetchData.tokens);
+      callBack && callBack();
+    }
     setIsLoading(false);
   };
 

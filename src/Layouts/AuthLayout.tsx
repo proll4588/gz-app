@@ -1,7 +1,15 @@
 import { Grid } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useNavigate, useNavigation } from 'react-router-dom';
 
 export const AuthLayout = () => {
+  const navigate = useNavigate();
+  const { location } = useNavigation();
+  useEffect(() => {
+    console.log(location);
+    // navigate('/');
+  }, [location]);
+
   return (
     <Grid
       container

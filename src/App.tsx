@@ -3,6 +3,7 @@ import { router } from './routes/mainRouter';
 import { Backdrop } from '@mui/material';
 import { authRouter } from './routes/authRouter';
 import { AuthProvider, useAuth } from './contexts/auth/auth.context';
+import { useEffect } from 'react';
 
 export const App = () => {
   return (
@@ -14,6 +15,10 @@ export const App = () => {
 
 export const AppRouting = () => {
   const { isAuth, isAuthChecked } = useAuth();
+
+  useEffect(() => {
+    console.log('isAuth >> ', isAuth);
+  }, [isAuth]);
 
   if (!isAuthChecked) return <Backdrop open />;
   if (!isAuth) return <RouterProvider router={authRouter} />;

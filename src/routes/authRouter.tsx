@@ -11,6 +11,7 @@ const AUTH_ROUTER: RouteObject[] = [
       {
         path: '/',
         element: <LoginPage />,
+        index: true,
       },
       {
         path: 'reg',

@@ -10,6 +10,7 @@ export const ROUTES: RouteObject[] = [
       {
         path: '/',
         element: <Main />,
+        index: true,
       },
     ],
   },
