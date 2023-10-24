@@ -1,24 +1,23 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/mainRouter';
-import { Backdrop } from '@mui/material';
+import { Backdrop, ThemeProvider } from '@mui/material';
 import { authRouter } from './routes/authRouter';
 import { AuthProvider, useAuth } from './contexts/auth/auth.context';
-import { useEffect } from 'react';
+import './styles.css';
+import { theme } from './theme/theme';
 
 export const App = () => {
   return (
-    <AuthProvider>
-      <AppRouting />
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <AppRouting />
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 
 export const AppRouting = () => {
   const { isAuth, isAuthChecked } = useAuth();
-
-  useEffect(() => {
-    console.log('isAuth >> ', isAuth);
-  }, [isAuth]);
 
   if (!isAuthChecked) return <Backdrop open />;
   if (!isAuth) return <RouterProvider router={authRouter} />;
