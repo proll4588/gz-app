@@ -1,89 +1,61 @@
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { FC, useState } from 'react';
+import {
+  AppBar,
+  Button,
+  Grid,
+  Paper,
+  Stack,
+  Toolbar,
+  Typography,
+} from '@mui/material';
+import { FC } from 'react';
 import { ID } from '../types/GeneralTypes';
 import { Add } from '@mui/icons-material';
 import { CreatePoolDialog } from '../components/CreatePoolDialog/CreatePoolDialog';
-
-const useViewDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const open = () => {
-    setIsOpen(true);
-  };
-
-  const close = () => {
-    setIsOpen(false);
-  };
-
-  return { isOpen, open, close };
-};
+import { useViewDialog } from '../hooks/useViewDialog';
+import { useQuery } from '@apollo/client';
+import { GET_POOL, GetPoolResponse } from '../apollo/fetches/pool/getPool';
+import { Pool, PoolsList } from '../components/PoolsList/PoolsList';
+import dayjs from 'dayjs';
+import { CustomBackdrop } from '../components/base-ui/CustomBackdrop/CustomBackdrop';
 
 export const Main = () => {
+  const { data, loading } = useQuery<GetPoolResponse>(GET_POOL);
   const { close, isOpen, open } = useViewDialog();
+
+  const convertedPools =
+    data !== undefined
+      ? data.getPool.map((pool) => ({
+          ...pool,
+          month: dayjs(pool.month * 1000),
+        }))
+      : [];
 
   return (
     <Grid
       sx={{
-        width: '100vw',
-        height: '100vh',
+        minWidth: '100vw',
+        minHeight: '100vh',
       }}
     >
       <CreatePoolDialog
         isOpen={isOpen}
         onClose={close}
       />
-      <Paper
-        square
-        sx={{
-          height: '50px',
-          px: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
+      <CustomBackdrop open={loading} />
+      <AppBar
+        color='inherit'
+        position='static'
       >
-        <Button
-          variant='contained'
-          startIcon={<Add />}
-          onClick={open}
-        >
-          Создать пул
-        </Button>
-      </Paper>
+        <Toolbar>
+          <Button
+            startIcon={<Add />}
+            onClick={open}
+          >
+            Создать пул
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <PoolsList pools={convertedPools} />
     </Grid>
-  );
-};
-
-interface Pool {
-  id: ID;
-  title: string;
-  isComplite: boolean;
-  taskCount: number;
-}
-
-export interface PoolListProps {
-  pools: Pool[];
-}
-export const PoolList: FC<PoolListProps> = ({ pools }) => {
-  return (
-    <Stack gap={1}>
-      {pools.map((pool) => (
-        <PoolItem
-          key={pool.id}
-          pool={pool}
-        />
-      ))}
-    </Stack>
-  );
-};
-
-export interface PoolItemProps {
-  pool: Pool;
-}
-export const PoolItem: FC<PoolItemProps> = ({ pool }) => {
-  return (
-    <Paper>
-      <Typography>{pool.title}</Typography>
-    </Paper>
   );
 };
