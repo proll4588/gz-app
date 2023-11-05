@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import { authToken } from '../libs/token';
 
 const httpLink = createHttpLink({
-  uri: 'https://localhost:4000/',
+  uri: 'http://localhost:4000/',
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -11,7 +11,7 @@ const authLink = setContext(async (_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: token ? `${token}` : '',
     },
   };
 });

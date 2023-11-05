@@ -1,9 +1,26 @@
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ID } from '../types/GeneralTypes';
 import { Add } from '@mui/icons-material';
+import { CreatePoolDialog } from '../components/CreatePoolDialog/CreatePoolDialog';
+
+const useViewDialog = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const open = () => {
+    setIsOpen(true);
+  };
+
+  const close = () => {
+    setIsOpen(false);
+  };
+
+  return { isOpen, open, close };
+};
 
 export const Main = () => {
+  const { close, isOpen, open } = useViewDialog();
+
   return (
     <Grid
       sx={{
@@ -11,6 +28,10 @@ export const Main = () => {
         height: '100vh',
       }}
     >
+      <CreatePoolDialog
+        isOpen={isOpen}
+        onClose={close}
+      />
       <Paper
         square
         sx={{
@@ -24,6 +45,7 @@ export const Main = () => {
         <Button
           variant='contained'
           startIcon={<Add />}
+          onClick={open}
         >
           Создать пул
         </Button>
