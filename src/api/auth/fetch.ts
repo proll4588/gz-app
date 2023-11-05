@@ -9,19 +9,12 @@ import {
 } from './type';
 
 const instanse = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: 'http://151.248.115.92:3030/api',
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
   },
 });
-
-// instanse.interceptors.request.use(async (req) => {
-//   const token = await getAccessToken();
-//   req.headers.Authorization = `Bearer ${token}`;
-
-//   return req;
-// });
 
 export const authLogin = async (data: LoginRequest) => {
   return await instanse.post<LoginResponse>('/login', data);

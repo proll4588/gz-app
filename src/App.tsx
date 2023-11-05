@@ -5,14 +5,18 @@ import { authRouter } from './routes/authRouter';
 import { AuthProvider, useAuth } from './contexts/auth/auth.context';
 import './styles.css';
 import { theme } from './theme/theme';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './apollo/client';
 
 export const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <AppRouting />
-      </AuthProvider>
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <AppRouting />
+        </AuthProvider>
+      </ThemeProvider>
+    </ApolloProvider>
   );
 };
 

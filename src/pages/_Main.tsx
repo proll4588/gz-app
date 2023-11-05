@@ -1,9 +1,35 @@
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { FC } from 'react';
 import { ID } from '../types/GeneralTypes';
+import { Add } from '@mui/icons-material';
 
 export const Main = () => {
-  return <Grid>Main page</Grid>;
+  return (
+    <Grid
+      sx={{
+        width: '100vw',
+        height: '100vh',
+      }}
+    >
+      <Paper
+        square
+        sx={{
+          height: '50px',
+          px: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <Button
+          variant='contained'
+          startIcon={<Add />}
+        >
+          Создать пул
+        </Button>
+      </Paper>
+    </Grid>
+  );
 };
 
 interface Pool {
